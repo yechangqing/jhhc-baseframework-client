@@ -111,9 +111,9 @@ public class RestUtil {
     }
 
     // post，返回的数据是String，由用户指定
-    public Sret post(String url, Map<String, Object> param) {
+    public Sret post(String url, Map<String, Object> param, Object... v) {
         MultiValueMap<String, String> map = getMultiValueFromMap(param);
-        ResponseEntity entity = this.rest.postForEntity(url, map, String.class);
+        ResponseEntity entity = this.rest.postForEntity(url, map, String.class, v);
         HttpHeaders headers = entity.getHeaders();
         String status = headers.get("status").get(0);
         String message = headers.get("message").get(0);
@@ -128,10 +128,6 @@ public class RestUtil {
 
         sr.setData(entity.getBody());
         return sr;
-    }
-
-    public Sret post(String url) {
-        return post(url, null);
     }
 
     private MultiValueMap<String, String> getMultiValueFromMap(Map<String, Object> param) {
