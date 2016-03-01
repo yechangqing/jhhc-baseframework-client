@@ -1,6 +1,8 @@
 package com.jhhc.baseframework.client.rest;
 
 import com.google.gson.Gson;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class RestUtil {
     // get all
     public Sret getList4Json(String url, Map<String, Object> param, Object... v) {
         if (param != null && !param.isEmpty()) {
-            url += "?" + condition2Param(param);
+            url += "?" + condition2ParamEncoded(param);
         }
         ResponseEntity entity = this.rest.getForEntity(url, String.class, v);
         HttpHeaders headers = entity.getHeaders();
@@ -73,12 +75,27 @@ public class RestUtil {
         return getList4Object(url, null, cls, v);
     }
 
-    private String condition2Param(Map<String, Object> condition) {
+//    private String condition2Param(Map<String, Object> condition) {
+//        String ret = "";
+//        Iterator<Entry<String, Object>> ite = condition.entrySet().iterator();
+//        while (ite.hasNext()) {
+//            Entry<String, Object> ent = ite.next();
+//            ret += ent.getKey().trim() + "=" + ent.getValue() + "&";
+//        }
+//        return ret.substring(0, ret.length() - 1);
+//    }
+    private String condition2ParamEncoded(Map<String, Object> condition) {
         String ret = "";
         Iterator<Entry<String, Object>> ite = condition.entrySet().iterator();
         while (ite.hasNext()) {
             Entry<String, Object> ent = ite.next();
-            ret += ent.getKey().trim() + "=" + ent.getValue() + "&";
+            String ori = (String) ent.getValue();
+            try {
+                ori = URLEncoder.encode(ori + "", "utf-8");
+            } catch (UnsupportedEncodingException ex) {
+
+            }
+            ret += ent.getKey().trim() + "=" + ori + "&";
         }
         return ret.substring(0, ret.length() - 1);
     }
@@ -86,7 +103,7 @@ public class RestUtil {
     // get single
     public Sret get4Json(String url, Map<String, Object> param, Object... v) {
         if (param != null && !param.isEmpty()) {
-            url += "?" + condition2Param(param);
+            url += "?" + condition2ParamEncoded(param);
         }
         ResponseEntity entity = this.rest.getForEntity(url, String.class, v);
         HttpHeaders headers = entity.getHeaders();
