@@ -29,11 +29,11 @@ public class RestUtil {
 //        System.out.println("初始化完毕...");
 //    }
     // get all
-    public Sret getList4Json(String url, Map<String, Object> condition) {
-        if (condition != null && !condition.isEmpty()) {
-            url += "?" + condition2Param(condition);
+    public Sret getList4Json(String url, Map<String, Object> param, Object... v) {
+        if (param != null && !param.isEmpty()) {
+            url += "?" + condition2Param(param);
         }
-        ResponseEntity entity = this.rest.getForEntity(url, String.class);
+        ResponseEntity entity = this.rest.getForEntity(url, String.class, v);
         HttpHeaders headers = entity.getHeaders();
         Sret sr = new Sret();
         String status = headers.get("status").get(0);
@@ -51,12 +51,12 @@ public class RestUtil {
         return sr;
     }
 
-    public Sret getList4Json(String url) {
-        return getList4Json(url, null);
+    public Sret getList4Json(String url, Object... v) {
+        return getList4Json(url, null, v);
     }
 
-    public Sret getList4Object(String url, Map<String, Object> condition, Class cls) {
-        Sret sr = getList4Json(url, condition);
+    public Sret getList4Object(String url, Map<String, Object> param, Class cls, Object... v) {
+        Sret sr = getList4Json(url, param, v);
         String json = (String) sr.getData();
         List li1 = new Gson().fromJson(json, List.class);
         List ret = new LinkedList();
@@ -69,8 +69,8 @@ public class RestUtil {
         return sr;
     }
 
-    public <T> Sret getList4Object(String url, Class<T> cls) {
-        return getList4Object(url, null, cls);
+    public <T> Sret getList4Object(String url, Class<T> cls, Object... v) {
+        return getList4Object(url, null, cls, v);
     }
 
     private String condition2Param(Map<String, Object> condition) {
@@ -84,7 +84,10 @@ public class RestUtil {
     }
 
     // get single
-    public Sret get4Json(String url, Object... v) {
+    public Sret get4Json(String url, Map<String, Object> param, Object... v) {
+        if (param != null && !param.isEmpty()) {
+            url += "?" + condition2Param(param);
+        }
         ResponseEntity entity = this.rest.getForEntity(url, String.class, v);
         HttpHeaders headers = entity.getHeaders();
         String status = headers.get("status").get(0);
@@ -103,11 +106,19 @@ public class RestUtil {
         return sr;
     }
 
-    public Sret get4Object(String url, Class cls, Object... v) {
-        Sret sr = get4Json(url, v);
+    public Sret get4Json(String url, Object... v) {
+        return get4Json(url, null, v);
+    }
+
+    public Sret get4Object(String url, Map<String, Object> param, Class cls, Object... v) {
+        Sret sr = get4Json(url, param, cls, v);
         String json = (String) sr.getData();
         sr.setData(new Gson().fromJson(json, cls));
         return sr;
+    }
+
+    public Sret get4Object(String url, Class cls, Object... v) {
+        return get4Object(url, null, cls, v);
     }
 
     // post，返回的数据是String，由用户指定
