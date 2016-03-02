@@ -2,6 +2,7 @@ package com.jhhc.baseframework.client.rest;
 
 import com.google.gson.Gson;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -40,6 +41,11 @@ public class RestUtil {
         Sret sr = new Sret();
         String status = headers.get("status").get(0);
         String message = headers.get("message").get(0);
+        try {
+            message = URLDecoder.decode(message, "utf-8");
+        } catch (UnsupportedEncodingException ex) {
+
+        }
         if (status.equalsIgnoreCase("ok")) {
             sr.setOk(message);
         } else if (status.equalsIgnoreCase("fail")) {
@@ -109,6 +115,11 @@ public class RestUtil {
         HttpHeaders headers = entity.getHeaders();
         String status = headers.get("status").get(0);
         String message = headers.get("message").get(0);
+        try {
+            message = URLDecoder.decode(message, "utf-8");
+        } catch (UnsupportedEncodingException ex) {
+
+        }
         Sret sr = new Sret();
         if (status.equalsIgnoreCase("ok")) {
             sr.setOk(message);
@@ -145,6 +156,11 @@ public class RestUtil {
         HttpHeaders headers = entity.getHeaders();
         String status = headers.get("status").get(0);
         String message = headers.get("message").get(0);
+        try {
+            message = URLDecoder.decode(message, "utf-8");
+        } catch (UnsupportedEncodingException ex) {
+
+        }
         Sret sr = new Sret();
         if (status.equalsIgnoreCase("ok")) {
             sr.setOk(message);
@@ -179,6 +195,11 @@ public class RestUtil {
         HttpHeaders headers = entity.getHeaders();
         String status = headers.get("status").get(0);
         String message = headers.get("message").get(0);
+        try {
+            message = URLDecoder.decode(message, "utf-8");
+        } catch (UnsupportedEncodingException ex) {
+
+        }
         Sret sr = new Sret();
         if (status.equalsIgnoreCase("ok")) {
             sr.setOk(message);
@@ -213,6 +234,11 @@ public class RestUtil {
         HttpHeaders headers = entity.getHeaders();
         String status = headers.get("status").get(0);
         String message = headers.get("message").get(0);
+        try {
+            message = URLDecoder.decode(message, "utf-8");
+        } catch (UnsupportedEncodingException ex) {
+
+        }
         Sret sr = new Sret();
         if (status.equalsIgnoreCase("ok")) {
             sr.setOk(message);
